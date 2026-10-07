@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PYTHON PIT // CORE EXCAVATOR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src=".index-BwyHQKLm.js"></script>
+  <link rel="stylesheet" crossorigin href=".index-BCCVbAaJ.css">
+</head>
+<body>
+  <!-- TOP NAVIGATION / MISSION CONTROL HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-group">
+        <span class="logo-icon">⛏️</span>
+        <div class="logo-titles">
+          <h1 class="logo-title">PYTHON PIT</h1>
+          <span class="logo-sub">CORE EXCAVATOR // SUBTERRANEAN PYTHON ACADEMY</span>
+        </div>
+      </div>
+      <div class="sector-dropdown-wrap">
+        <label for="level-select" class="control-label">STRATA SECTOR:</label>
+        <select id="level-select" class="cyber-select"></select>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div id="runtime-status" class="runtime-badge">
+        <span class="badge-loading">🟡 Loading CPython 3.11...</span>
+      </div>
+      <div class="header-actions">
+        <button id="btn-demo" class="btn btn-demo" title="Watch optimal Python solution execute">📺 WATCH DEMO</button>
+        <button id="btn-run" class="btn btn-primary" title="Execute Python script in WASM">⚡ RUN PYTHON</button>
+        <button id="btn-reset" class="btn btn-secondary" title="Reset rover position">⏹ RESET</button>
+        <button id="btn-speed" class="btn btn-utility">⚡ SPEED: 1.0x</button>
+        <button id="btn-mute" class="btn btn-utility">🔊 AUDIO</button>
+        <button id="btn-docs" class="btn btn-utility">📖 DOCS</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN SPLIT WORKSPACE -->
+  <main class="main-layout">
+    <!-- LEFT: SUBTERRANEAN DRILL SIMULATOR -->
+    <section class="viewport-panel">
+      <!-- TELEMETRY HUD STRIP -->
+      <div class="telemetry-bar">
+        <div class="telemetry-item">
+          <span class="hud-label">DEPTH</span>
+          <span id="hud-depth" class="hud-value neon-cyan">0m</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="hud-label">BATTERY</span>
+          <span id="hud-battery" class="hud-value neon-gold">100%</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="hud-label">TORQUE</span>
+          <span id="hud-torque" class="hud-value">40 Nm</span>
+        </div>
+        <div class="telemetry-item wide">
+          <span class="hud-label">CARGO BAY</span>
+          <span id="hud-cargo" class="hud-value">[0] EMPTY</span>
+        </div>
+        <div class="telemetry-item wide">
+          <span class="hud-label">ACTIVE STRATA</span>
+          <span id="hud-strata" class="hud-value muted">Surface Loam</span>
+        </div>
+      </div>
+
+      <!-- CANVAS SIMULATOR CONTAINER -->
+      <div class="canvas-container">
+        <canvas id="world-canvas"></canvas>
+      </div>
+
+      <!-- ON-SCREEN D-PAD & TACTILE MANUAL CONTROLS -->
+      <div class="dpad-strip">
+        <div class="dpad-info">
+          <span class="dpad-tag">🕹️ MANUAL OVERRIDE:</span>
+          <span class="dpad-hint">W/A/S/D to drive &bull; Space to Drill &bull; Q to Scan &bull; E to Collect</span>
+        </div>
+        <div class="dpad-controls">
+          <div class="dpad-cross">
+            <button id="dpad-up" class="dpad-btn" title="Move Up">▲</button>
+            <div class="dpad-middle">
+              <button id="dpad-left" class="dpad-btn" title="Move Left">◀</button>
+              <button id="dpad-down" class="dpad-btn" title="Move Down">▼</button>
+              <button id="dpad-right" class="dpad-btn" title="Move Right">▶</button>
+            </div>
+          </div>
+          <div class="dpad-actions">
+            <button id="dpad-drill" class="dpad-action-btn drill-btn">⚡ DRILL</button>
+            <button id="dpad-scan" class="dpad-action-btn scan-btn">📡 SCAN</button>
+            <button id="dpad-collect" class="dpad-action-btn collect-btn">💎 COLLECT</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: PYTHON MISSION CONTROL & CODE EDITOR -->
+    <section class="editor-panel">
+      <!-- MISSION BRIEFING CARD -->
+      <div class="briefing-card">
+        <div class="briefing-header">
+          <div>
+            <h2 id="level-title" class="sector-title">Sector 0: Calibration Drop</h2>
+            <div id="level-subtitle" class="sector-subtitle">The Basics // Sequential Execution</div>
+          </div>
+        </div>
+        <div class="objectives-wrap">
+          <span class="objectives-title">MISSION OBJECTIVES:</span>
+          <ul id="level-objectives" class="objectives-list"></ul>
+        </div>
+      </div>
+
+      <!-- CODE EDITOR BOX -->
+      <div class="code-editor-header">
+        <span class="editor-tab active">📄 rover_mission.py</span>
+        <span class="editor-badge">Python 3.11</span>
+      </div>
+      <div id="code-editor-container" class="code-editor-box"></div>
+
+      <!-- TERMINAL & TELEMETRY OUTPUT -->
+      <div class="console-panel">
+        <div class="console-header">
+          <span class="console-title">🖥️ TELEMETRY CONSOLE & PYTHON STDOUT</span>
+          <button id="btn-copy-console" class="btn-copy-logs" title="Copy entire console log to clipboard">📋 COPY LOGS</button>
+        </div>
+        <div id="console-logs" class="console-body"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- VICTORY CELEBRATION MODAL -->
+  <div id="victory-modal" class="modal-backdrop hidden">
+    <div class="modal-card victory-card">
+      <div class="victory-icon">🎉 💎 🏆</div>
+      <h2 class="victory-title">SECTOR CLEARED!</h2>
+      <p id="victory-msg" class="victory-description">Strata breached and mission objectives fulfilled.</p>
+      <div class="victory-actions">
+        <button id="victory-next-btn" class="btn btn-primary btn-large">NEXT SECTOR ➔</button>
+        <button id="victory-close-btn" class="btn btn-secondary">REVIEW CODE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PYTHON REFERENCE MANUAL MODAL -->
+  <div id="docs-modal" class="modal-backdrop hidden">
+    <div class="modal-card docs-card">
+      <div class="docs-header">
+        <h2 class="docs-title">⚡ TERRA-PY DRILL // PYTHON REFERENCE MANUAL</h2>
+        <button id="docs-close" class="modal-close-btn">✕</button>
+      </div>
+      <div class="docs-body">
+        <div class="doc-section">
+          <h3>1. Rover Navigation & Drilling</h3>
+          <pre><code>rover.drill()        # Drills tile in front of the rover
+rover.move_down()    # Moves the rover down 1 tile
+rover.move_up()      # Moves the rover up 1 tile
+rover.move_left()    # Moves the rover left 1 tile
+rover.move_right()   # Moves the rover right 1 tile
+rover.collect()      # Collects Emerald or Lithium crystals</code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>2. Optical Radar Scanning</h3>
+          <pre><code>tile = rover.scan_down()
+# Returns: 'DIRT', 'BASALT', 'MAGMA', 'LITHIUM', 'EMERALD', 'AIR'
+if tile == "MAGMA":
+    # Divert path to prevent overheating!
+    rover.move_right()</code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>3. Loops with range()</h3>
+          <pre><code>for layer in range(6):
+    rover.drill()
+    rover.move_down()</code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>4. Cargo Lists & len()</h3>
+          <pre><code># rover.cargo is a Python list of collected strings
+print(rover.cargo)       # -> ['Lithium Core', 'Emerald Geode']
+total = len(rover.cargo) # -> Number of items</code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>5. Subsystem Dictionaries</h3>
+          <pre><code># rover.systems is a Python dictionary
+rover.systems["torque"] = 90  # Overclock torque to pierce titanium armor!
+rover.systems["shield"] = 100</code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>6. Reusable Functions</h3>
+          <pre><code>def harvest_pocket():
+    rover.drill_right()
+    rover.move_right()
+    rover.collect()
+    rover.move_left()
+
+harvest_pocket() # Runs the whole subroutine!</code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>7. While Loops & State Checks</h3>
+          <pre><code>while rover.battery &lt; 80:
+    rover.drill()
+    rover.move_down()
+    rover.collect() # Recharges at Power Cells</code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>8. List Comprehensions</h3>
+          <pre><code># Filter lists in a single elegant line:
+emeralds = [item for item in rover.cargo if "Emerald" in item]
+print("Found Emeralds:", len(emeralds))</code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>9. Tuples & Path Coordinates</h3>
+          <pre><code>route = [("DOWN", 2), ("RIGHT", 2), ("DOWN", 1)]
+for direction, steps in route:
+    for _ in range(steps):
+        rover.move_down() if direction == "DOWN" else rover.move_right()</code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>10. Master Protocol (Combining Systems)</h3>
+          <pre><code>rover.systems["torque"] = 90  # Overclock systems
+if rover.scan_down() == "MAGMA":
+    rover.move_right()        # Radar safety detour</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
